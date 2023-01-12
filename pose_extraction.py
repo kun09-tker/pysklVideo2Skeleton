@@ -347,14 +347,19 @@ def label_to_dict(file_label):
     return label
 
 
-def video_to_pickle(folder_video, file_label, output_pickle_name):
+def video_to_pickle(index, folder_video, file_label, output_pickle_name):
     args.device = 'cuda:0'
     anno = []
     label = label_to_dict(file_label)
     for root, dris, files in os.walk(folder_video):
-        for name in files:
+        for name in files[index*50:]:
             path_video = os.path.join(root, name)
             anno.append(ntu_pose_extraction(path_video, label[name]))
+
+            if len(anno) == 50:
+                mmcv.dump(anno, f"{output_pickle_name.split('.')[0]}_{index}.pkl")
+                index = index + 1
+            print(F"........................SAVING {index*50} FIRST....................")
     mmcv.dump(anno, output_pickle_name)
 
 
