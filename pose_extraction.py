@@ -14,14 +14,16 @@ import numpy as np
 
 try:
     from mmdet.apis import inference_detector, init_detector
-except (ImportError, ModuleNotFoundError):
+except (ImportError, ModuleNotFoundError) as e:
+    print(e)
     raise ImportError('Failed to import `inference_detector` and '
                       '`init_detector` form `mmdet.apis`. These apis are '
                       'required in this script! ')
 
 try:
     from mmpose.apis import inference_top_down_pose_model, init_pose_model
-except (ImportError, ModuleNotFoundError):
+except (ImportError, ModuleNotFoundError) as e:
+    print(e)
     raise ImportError('Failed to import `inference_top_down_pose_model` and '
                       '`init_pose_model` form `mmpose.apis`. These apis are '
                       'required in this script! ')
