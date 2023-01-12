@@ -24,6 +24,3 @@ pip install -e .
 # Install some optional requirements
 pip install -r requirements/optional.txt
 cd ..
-
-echo "Update numpy"
-pip install numpy==1.23.0
