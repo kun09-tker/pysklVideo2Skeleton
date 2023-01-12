@@ -356,10 +356,10 @@ def video_to_pickle(index, folder_video, file_label, output_pickle_name):
             path_video = os.path.join(root, name)
             anno.append(ntu_pose_extraction(path_video, label[name]))
 
-            if len(anno) == 50:
+            if len(anno) % 50 == 0:
                 mmcv.dump(anno, f"{output_pickle_name.split('.')[0]}_{index}.pkl")
                 index = index + 1
-                print(f"........................SAVING {index*50} FIRST....................")
+                print(f"........................SAVING {(index+1)*50} FIRST....................")
     mmcv.dump(anno, output_pickle_name)
 
 
