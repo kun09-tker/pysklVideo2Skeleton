@@ -360,8 +360,8 @@ def video_to_pickle(index, folder_video, file_label, output_pickle_name):
 
             if len(anno) == 50:
                 mmcv.dump(anno, f"{output_pickle_name.split('.')[0]}_{index}.pkl")
-                index = index + 1
                 print(f"\n........................SAVING {index*50} FIRST....................\n")
+                index = index + 1
                 anno = []
     mmcv.dump(anno, output_pickle_name)
     print(f"\n........................SAVING ALL....................\n")
