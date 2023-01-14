@@ -84,7 +84,7 @@ def pose_inference(args, frame_paths, det_results):
     prog_bar = mmcv.ProgressBar(len(frame_paths))
 
     num_frame = len(det_results)
-    num_person = max([len(x) for x in det_results])
+    num_person = round(np.mean([len(x) for x in det_results]))
     kp = np.zeros((num_person, num_frame, 17, 3), dtype=np.float32)
 
     for i, (f, d) in enumerate(zip(frame_paths, det_results)):
