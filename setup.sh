@@ -24,3 +24,7 @@ pip install -e .
 # Install some optional requirements
 pip install -r requirements/optional.txt
 cd ..
+
+echo "Update numpy"
+pip uninstall numpy -y
+pip install numpy
