@@ -3,7 +3,6 @@ import matplotlib.cm as cm
 import numpy as np
 import cv2
 from pipelines import Compose
-from mmcv import load
 limb_pipeline = [
     dict(type='PoseDecode'),
     dict(type='PoseCompact', hw_ratio=1., allow_imgpad=True),
@@ -30,8 +29,7 @@ def vis_heatmaps(heatmaps, channel=-1, ratio=(8,8)):
     return heatmaps
 
 
-def to_heatmap(data_path, ratio=(8,8), show_video = True):
-    anno = load(data_path)
+def to_heatmap(anno, ratio=(8,8), show_video = True):
     limb_heatmap = get_pseudo_heatmap(anno, 'limb')
     limb_mapvis = vis_heatmaps(limb_heatmap, ratio=ratio)
     # limb_mapvis = [add_label(f, gym_categories[anno['label']]) for f in limb_mapvis]
