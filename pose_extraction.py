@@ -48,6 +48,10 @@ def extract_frame(video_path):
     os.makedirs(dname, exist_ok=True)
     frame_tmpl = osp.join(dname, 'img_{:05d}.jpg')
     vid = cv2.VideoCapture(video_path)
+    height, width = (1080, 1920)
+    if vid.isOpened():
+        width  = vid.get(3)  # float `width`
+        height = vid.get(4)  # float `height`
     frame_paths = []
     flag, frame = vid.read()
     cnt = 0
@@ -59,7 +63,7 @@ def extract_frame(video_path):
         cnt += 1
         flag, frame = vid.read()
 
-    return frame_paths
+    return frame_paths, (height, width)
 
 
 def detection_inference(args, frame_paths):
@@ -309,7 +313,7 @@ def pose_inference(args, frame_paths, det_results):
 
 
 def ntu_pose_extraction(vid, label):
-    frame_paths = extract_frame(vid)
+    frame_paths, original_shape = extract_frame(vid)
     det_results = detection_inference(args, frame_paths)
     # if not skip_postproc:
     #     det_results = ntu_det_postproc(vid, det_results)
@@ -319,9 +323,10 @@ def ntu_pose_extraction(vid, label):
     anno['keypoint_score'] = pose_results[..., 2]
     anno['frame_dir'] = osp.splitext(osp.basename(vid))[0]
     anno['img_shape'] = (1080, 1920)
-    anno['original_shape'] = (1080, 1920)
+    anno['original_shape'] = original_shape
     anno['total_frames'] = pose_results.shape[1]
     anno['label'] = label
+    print(anno['original_shape'])
     shutil.rmtree(osp.dirname(frame_paths[0]))
 
     return anno
