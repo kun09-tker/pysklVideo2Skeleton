@@ -2,7 +2,7 @@ import moviepy.editor as mpy
 import matplotlib.cm as cm
 import numpy as np
 import cv2
-from pipelines import Compose
+from .pipelines import Compose
 limb_pipeline = [
     dict(type='PoseDecode'),
     dict(type='PoseCompact', hw_ratio=1., allow_imgpad=True),
@@ -29,12 +29,12 @@ def vis_heatmaps(heatmaps, channel=-1, ratio=(8,8)):
     return heatmaps
 
 
-def to_heatmap(anno, ratio=(8,8), show_video = True):
-    limb_heatmap = get_pseudo_heatmap(anno, 'limb')
+def to_heatmap(anno, ratio=(8,8)):
+    limb_heatmap = get_pseudo_heatmap(anno)
     limb_mapvis = vis_heatmaps(limb_heatmap, ratio=ratio)
     # limb_mapvis = [add_label(f, gym_categories[anno['label']]) for f in limb_mapvis]
-    if show_video:
-        vid = mpy.ImageSequenceClip(limb_mapvis, fps=24)
-        vid.ipython_display()
+    # if show_video:
+    #     vid = mpy.ImageSequenceClip(limb_mapvis, fps=24)
+    #     vid.ipython_display()
 
     return limb_mapvis

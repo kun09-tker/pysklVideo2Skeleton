@@ -37,3 +37,6 @@ pip install torch>=1.5
 
 echo "Install moviepy"
 pip install moviepy
+
+echo "Install imageio"
+pip3 install imageio==2.4.1
