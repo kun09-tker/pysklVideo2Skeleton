@@ -25,6 +25,15 @@ pip install -e .
 pip install -r requirements/optional.txt
 cd ..
 
+echo "install scipy"
+pip install scipy
+
 echo "Update numpy"
 pip uninstall numpy -y
 pip install numpy
+
+echo "Install torch"
+pip install torch>=1.5
+
+echo "Install moviepy"
+pip install moviepy
