@@ -353,30 +353,26 @@ def label_to_dict(file_label):
         label[n.strip()] = int(l)
     return label
 
-def check_miss_video(name, miss_videos):
-    if miss_videos is None:
-        return True
-    if name in miss_videos:
-        return True
-    return False
 
-def video_to_pickle(index, folder_video, file_label, output_pickle_name, miss_videos = None):
+def video_to_pickle(index, folder_video, file_label, output_pickle_name):
     args.device = 'cuda:0'
     anno = []
     label = label_to_dict(file_label)
-    for root, dris, files in os.walk(folder_video):
-        for name in files[index*50:]:
-            if check_miss_video(name, miss_videos):
-                path_video = os.path.join(root, name)
-                anno.append(ntu_pose_extraction(path_video, label[name]))
+    for name in label.keys()[index*50:]:
+        path_video = os.path.join(folder_video, name)
+        anno.append(ntu_pose_extraction(path_video, label[name]))
+    # for root, dris, files in os.walk(folder_video):
+    #     for name in files[index*50:]:
+    #         path_video = os.path.join(root, name)
+    #         anno.append(ntu_pose_extraction(path_video, label[name]))
 
-                print(f"\n----{index*50 + len(anno)} Video----")
+        print(f"\n----Done {index*50 + len(anno)} Video----")
 
-                if len(anno) == 50:
-                    mmcv.dump(anno, f"{output_pickle_name.split('.')[0]}_{index}.pkl")
-                    index = index + 1
-                    print(f"\n........................SAVING {index*50} FIRST....................\n")
-                    anno = []
+        if len(anno) == 50:
+            mmcv.dump(anno, f"{output_pickle_name.split('.')[0]}_{index}.pkl")
+            index = index + 1
+            print(f"\n........................SAVING {index*50} VIDEO FIRST....................\n")
+            anno = []
     mmcv.dump(anno, output_pickle_name)
     print(f"\n........................SAVING ALL....................\n")
 
