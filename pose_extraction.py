@@ -360,9 +360,9 @@ def video_to_pickle(index, folder_video, file_label, output_pickle_name, type="a
     label = label_to_dict(file_label)
     name_label = [n for n in label.keys()]
     for name in name_label[index*50:]:
+        path_video = os.path.join(folder_video, name)
         if type:
             path_video += f".{type}"
-        path_video = os.path.join(folder_video, name)
         anno.append(ntu_pose_extraction(path_video, label[name]))
     # for root, dris, files in os.walk(folder_video):
     #     for name in files[index*50:]:
