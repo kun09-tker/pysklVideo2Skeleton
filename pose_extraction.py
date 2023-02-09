@@ -74,6 +74,8 @@ def detection_inference(args, frame_paths):
     print('Performing Human Detection for each frame')
     prog_bar = mmcv.ProgressBar(len(frame_paths))
     for frame_path in frame_paths:
+        print("\n")
+        print(frame_path)
         result = inference_detector(model, frame_path)
         # We only keep human detections with score larger than det_score_thr
         print("\nResult................\n")
