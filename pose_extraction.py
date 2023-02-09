@@ -91,7 +91,7 @@ def pose_inference(args, frame_paths, det_results):
     prog_bar = mmcv.ProgressBar(len(frame_paths))
 
     num_frame = len(det_results)
-    num_person = round(np.mean([len(x) for x in det_results]))
+    num_person = max([len(x) for x in det_results])
     print("\n\n max: ", num_person)
     print("\n\n mode:", stats.mode([len(x) for x in det_results]))
     kp = np.zeros((num_person, num_frame, 17, 3), dtype=np.float32)
@@ -99,8 +99,8 @@ def pose_inference(args, frame_paths, det_results):
     for i, (f, d) in enumerate(zip(frame_paths, det_results)):
         # Align input format
         d = list(d)
-        d.sort(key=lambda a: a[-1], reverse=True)
-        d = [dict(bbox=x) for x in d if x[-1] > 0.5][:num_person]
+#         d.sort(key=lambda a: a[-1], reverse=True)
+#         d = [dict(bbox=x) for x in d if x[-1] > 0.5][:num_person]
         pose = inference_top_down_pose_model(model, f, d, format='xyxy')[0]
         for j, item in enumerate(pose):
             kp[j, i] = item['keypoints']
