@@ -68,14 +68,16 @@ def extract_frame(video_path):
 
 def detection_inference(args, frame_paths):
     model = init_detector(args.det_config, args.det_checkpoint, args.device)
-    assert model.CLASSES[0] == 'person', ('We require you to use a detector '
-                                          'trained on COCO')
+#     assert model.CLASSES[0] == 'person', ('We require you to use a detector '
+#                                           'trained on COCO')
     results = []
     print('Performing Human Detection for each frame')
     prog_bar = mmcv.ProgressBar(len(frame_paths))
     for frame_path in frame_paths:
         result = inference_detector(model, frame_path)
         # We only keep human detections with score larger than det_score_thr
+        print("\nResult................\n")
+        print(result)
         result = result[0][result[0][:, 4] >= args.det_score_thr]
         results.append(result)
         prog_bar.update()
