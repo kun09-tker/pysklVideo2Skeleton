@@ -78,8 +78,8 @@ def detection_inference(args, frame_paths):
         result = inference_detector(model, frame_path)
         # We only keep human detections with score larger than det_score_thr
         result = result[0][result[0][:, 4] >= args.det_score_thr]
-        print("\nNumber bounding boxes................\n")
-        print(len(result))
+#         print("\nNumber bounding boxes................\n")
+#         print(len(result))
         results.append(result)
         prog_bar.update()
     return results
@@ -92,8 +92,8 @@ def pose_inference(args, frame_paths, det_results):
 
     num_frame = len(det_results)
     num_person = max([len(x) for x in det_results])
-    print("\n\n max: ", num_person)
-    print("\n\n mode:", stats.mode([len(x) for x in det_results]))
+#     print("\n\n max: ", num_person)
+#     print("\n\n mode:", stats.mode([len(x) for x in det_results]))
     kp = np.zeros((num_person, num_frame, 17, 3), dtype=np.float32)
 
     for i, (f, d) in enumerate(zip(frame_paths, det_results)):
@@ -332,6 +332,7 @@ def ntu_pose_extraction(vid, label):
     anno['original_shape'] = original_shape
     anno['total_frames'] = pose_results.shape[1]
     anno['label'] = label
+    print("\n")
     print(anno['original_shape'])
     shutil.rmtree(osp.dirname(frame_paths[0]))
 
