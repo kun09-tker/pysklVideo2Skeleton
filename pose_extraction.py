@@ -32,7 +32,7 @@ mmdet_root = 'mmdetection'
 mmpose_root = 'mmpose'
 
 args = abc.abstractproperty()
-args.det_config = f'{mmdet_root}/configs/yolox/yolox_x_8x8_300e_coco.pyy'  # noqa: E501
+args.det_config = f'{mmdet_root}/configs/yolox/yolox_x_8x8_300e_coco.py'  # noqa: E501
 args.det_checkpoint = 'https://download.openmmlab.com/mmdetection/v2.0/yolox/yolox_x_8x8_300e_coco/yolox_x_8x8_300e_coco_20211126_140254-1ef88d67.pth'  # noqa: E501
 args.det_score_thr = 0.5
 args.pose_config = f'{mmpose_root}/configs/body/2d_kpt_sview_rgb_img/topdown_heatmap/coco/hrnet_w32_coco_256x192.py'  # noqa: E501
