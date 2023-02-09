@@ -368,6 +368,7 @@ def video_to_pickle(index, folder_video, file_label, output_pickle_name, type="a
         path_video = os.path.join(folder_video, name)
         if type:
             path_video += f".{type}"
+        print("\npath_video :", path_video)
         anno.append(ntu_pose_extraction(path_video, label[name]))
     # for root, dris, files in os.walk(folder_video):
     #     for name in files[index*50:]:
