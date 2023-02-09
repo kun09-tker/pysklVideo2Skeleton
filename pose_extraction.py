@@ -98,9 +98,10 @@ def pose_inference(args, frame_paths, det_results):
 
     for i, (f, d) in enumerate(zip(frame_paths, det_results)):
         # Align input format
-        d = list(d)
-        d.sort(key=lambda a: a[-1], reverse=True)
-        d = [dict(bbox=x) for x in d if x[-1] > 0.5][:num_person]
+#         d = list(d)
+#         d.sort(key=lambda a: a[-1], reverse=True)
+#         d = [dict(bbox=x) for x in d if x[-1] > 0.5][:num_person]
+        d = [dict(bbox=x) for x in list(d) if x[-1] > 0.5]
         pose = inference_top_down_pose_model(model, f, d, format='xyxy')[0]
         for j, item in enumerate(pose):
             kp[j, i] = item['keypoints']
