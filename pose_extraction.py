@@ -32,8 +32,10 @@ mmdet_root = 'mmdetection'
 mmpose_root = 'mmpose'
 
 args = abc.abstractproperty()
-args.det_config = f'{mmdet_root}/configs/yolox/yolox_l_8x8_300e_coco.py'  # noqa: E501
-args.det_checkpoint = 'https://download.openmmlab.com/mmdetection/v2.0/yolox/yolox_l_8x8_300e_coco/yolox_l_8x8_300e_coco_20211126_140236-d3bd2b23.pth'  # noqa: E501
+args.det_configyolo = f'{mmdet_root}/configs/yolox/yolox_l_8x8_300e_coco.py'  # noqa: E501
+args.det_checkpointyolo = 'https://download.openmmlab.com/mmdetection/v2.0/yolox/yolox_l_8x8_300e_coco/yolox_l_8x8_300e_coco_20211126_140236-d3bd2b23.pth' 
+args.det_config = f'{mmdet_root}/configs/faster_rcnn/faster_rcnn_r50_caffe_fpn_mstrain_1x_coco-person.py'  # noqa: E501
+args.det_checkpoint = 'https://download.openmmlab.com/mmdetection/v2.0/faster_rcnn/faster_rcnn_r50_fpn_1x_coco-person/faster_rcnn_r50_fpn_1x_coco-person_20201216_175929-d022e227.pth'# noqa: E501
 args.det_score_thr = 0.5
 args.pose_config = f'{mmpose_root}/configs/body/2d_kpt_sview_rgb_img/topdown_heatmap/coco/hrnet_w32_coco_256x192.py'  # noqa: E501
 args.pose_checkpoint = 'https://download.openmmlab.com/mmpose/top_down/hrnet/hrnet_w32_coco_256x192-c78dce93_20200708.pth'  # noqa: E501
@@ -69,6 +71,23 @@ def extract_frame(video_path):
 
 def detection_inference(args, frame_paths):
     model = init_detector(args.det_config, args.det_checkpoint, args.device)
+    assert model.CLASSES[0] == 'person', ('We require you to use a detector '
+                                          'trained on COCO')
+    results = []
+    print('Performing Human Detection for each frame')
+    prog_bar = mmcv.ProgressBar(len(frame_paths))
+    for frame_path in frame_paths:
+        result = inference_detector(model, frame_path)
+        # We only keep human detections with score larger than det_score_thr
+        result = result[0][result[0][:, 4] >= args.det_score_thr]
+#         print("\nNumber bounding boxes................\n")
+#         print(len(result))
+        results.append(result)
+        prog_bar.update()
+    return results
+
+def detection_inference_yolo(args, frame_paths):
+    model = init_detector(args.det_configyolo, args.det_checkpointyolo, args.device)
     assert model.CLASSES[0] == 'person', ('We require you to use a detector '
                                           'trained on COCO')
     results = []
@@ -318,9 +337,12 @@ def pose_inference(args, frame_paths, det_results):
 #         return bboxes2bbox(det_results, len(det_results))
 
 
-def ntu_pose_extraction(vid, label):
+def ntu_pose_extraction(vid, label, model_dectection):
     frame_paths, original_shape = extract_frame(vid)
-    det_results = detection_inference(args, frame_paths)
+    if model_dectection == "rcnn":
+        det_results = detection_inference(args, frame_paths)
+    elif model_dectection == "yolo":
+        det_results = detection_inference_yolo(args, frame_paths)
     # if not skip_postproc:
     #     det_results = ntu_det_postproc(vid, det_results)
     pose_results = pose_inference(args, frame_paths, det_results)
@@ -361,7 +383,7 @@ def label_to_dict(file_label):
     return label
 
 
-def video_to_pickle(index, folder_video, file_label, output_pickle_name, type="avi"):
+def video_to_pickle(index, folder_video, file_label, output_pickle_name, type="avi", model_dectection = "rcnn"):
     args.device = 'cuda:0'
     anno = []
     label = label_to_dict(file_label)
@@ -371,7 +393,7 @@ def video_to_pickle(index, folder_video, file_label, output_pickle_name, type="a
         if type:
             path_video += f".{type}"
         print("\npath_video :", path_video)
-        anno.append(ntu_pose_extraction(path_video, label[name]))
+        anno.append(ntu_pose_extraction(path_video, label[name], model_dectection))
     # for root, dris, files in os.walk(folder_video):
     #     for name in files[index*50:]:
     #         path_video = os.path.join(root, name)
