@@ -11,8 +11,17 @@ limb_pipeline = [
     dict(type='GeneratePoseTarget', with_kp=False, with_limb=True)
 ]
 
-def get_pseudo_heatmap(anno):
-    pipeline = Compose(limb_pipeline)
+keypoint_pipeline = [
+    dict(type='PoseDecode'),
+    dict(type='PoseCompact', hw_ratio=1., allow_imgpad=True),
+    dict(type='Resize', scale=(-1, 64)),
+    dict(type='CenterCrop', crop_size=64),
+    dict(type='GeneratePoseTarget', with_kp=True, with_limb=False)
+]
+
+def get_pseudo_heatmap(anno, flag='keypoint'):
+    assert flag in ['keypoint', 'limb']
+    pipeline = Compose(keypoint_pipeline if flag == 'keypoint' else limb_pipeline)
     return pipeline(anno)['imgs']
 
 def vis_heatmaps(heatmaps, channel=-1, ratio=(8,8)):
@@ -28,12 +37,12 @@ def vis_heatmaps(heatmaps, channel=-1, ratio=(8,8)):
     heatmaps = [cv2.resize(x, (neww, newh)) for x in heatmaps]
     return heatmaps
 
-def to_pseudo_heatmap(anno, ratio=(8,8)):
-    return get_pseudo_heatmap(anno).transpose(1, 0, 2, 3)
+def to_pseudo_heatmap(anno, flag='keypoint'):
+    return get_pseudo_heatmap(anno, flag).transpose(1, 0, 2, 3)
 #     limb_mapvis = vis_heatmaps(limb_heatmap, ratio=ratio)
 
-def to_heatmap(anno, ratio=(8,8)):
-    limb_heatmap = get_pseudo_heatmap(anno)
+def to_heatmap(anno, flag='keypoint', ratio=(8,8)):
+    limb_heatmap = get_pseudo_heatmap(anno, flag)
     limb_mapvis = vis_heatmaps(limb_heatmap, ratio=ratio)
     # limb_mapvis = [add_label(f, gym_categories[anno['label']]) for f in limb_mapvis]
     # if show_video:
