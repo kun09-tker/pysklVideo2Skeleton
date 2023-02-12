@@ -28,7 +28,7 @@ def vis_heatmaps(heatmaps, channel=-1, ratio=(8,8)):
     heatmaps = [cv2.resize(x, (neww, newh)) for x in heatmaps]
     return heatmaps
 
-def to_heatmap(anno, ratio=(8,8)):
+def to_pseudo_heatmap(anno, ratio=(8,8)):
     return get_pseudo_heatmap(anno)
 #     limb_mapvis = vis_heatmaps(limb_heatmap, ratio=ratio)
 
