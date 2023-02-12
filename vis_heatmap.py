@@ -29,7 +29,7 @@ def vis_heatmaps(heatmaps, channel=-1, ratio=(8,8)):
     return heatmaps
 
 def to_pseudo_heatmap(anno, ratio=(8,8)):
-    return get_pseudo_heatmap(anno)
+    return get_pseudo_heatmap(anno).transpose(1, 0, 2, 3)
 #     limb_mapvis = vis_heatmaps(limb_heatmap, ratio=ratio)
 
 def to_heatmap(anno, ratio=(8,8)):
