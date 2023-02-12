@@ -139,4 +139,4 @@ def Vis2DPose(item, thre=0.2, out_shape=(540, 960), layout='coco', fps=24, video
                     color = [x + (y - x) * (conf - thre) / 0.8 for x, y in zip(co_tup[0], co_tup[1])]
                     color = tuple([int(x) for x in color])
                     frames[i] = cv2.line(frames[i], (j1x, j1y), (j2x, j2y), color, thickness=2)
-    return mpy.ImageSequenceClip(frames, fps=fps)
+    return frames
