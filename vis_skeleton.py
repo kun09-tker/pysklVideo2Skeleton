@@ -96,9 +96,9 @@ def Vis2DPose(item, thre=0.2, out_shape=(540, 960), layout='coco', fps=24, video
         kp = np.concatenate([kp, kpscore[..., None]], -1)
 
     assert kp.shape[-1] == 3
-    img_shape = item.get('img_shape', out_shape)
-    kp[..., 0] *= out_shape[1] / img_shape[1]
-    kp[..., 1] *= out_shape[0] / img_shape[0]
+#     img_shape = item.get('img_shape', out_shape)
+#     kp[..., 0] *= out_shape[1] / img_shape[1]
+#     kp[..., 1] *= out_shape[0] / img_shape[0]
 
     total_frames = item.get('total_frames', kp.shape[1])
     assert total_frames == kp.shape[1]
