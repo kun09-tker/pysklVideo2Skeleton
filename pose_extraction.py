@@ -39,7 +39,7 @@ args.det_checkpoint = 'https://download.openmmlab.com/mmdetection/v2.0/faster_rc
 args.det_score_thr = 0.5
 args.pose_config = f'{mmpose_root}/configs/body/2d_kpt_sview_rgb_img/topdown_heatmap/coco/hrnet_w32_coco_256x192.py'  # noqa: E501
 args.pose_checkpoint = 'https://download.openmmlab.com/mmpose/top_down/hrnet/hrnet_w32_coco_256x192-c78dce93_20200708.pth'  # noqa: E501
-
+args.device = 'cuda:0'
 
 def gen_id(size=8):
     chars = string.ascii_uppercase + string.digits
@@ -384,7 +384,6 @@ def label_to_dict(file_label):
 
 
 def video_to_pickle(index, folder_video, file_label, output_pickle_name, type="avi", model_dectection = "rcnn"):
-    args.device = 'cuda:0'
     anno = []
     label = label_to_dict(file_label)
     name_label = [n for n in label.keys()]
