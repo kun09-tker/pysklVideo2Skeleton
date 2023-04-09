@@ -32,13 +32,13 @@ mmdet_root = 'mmdetection'
 mmpose_root = 'mmpose'
 
 args = abc.abstractproperty()
-args.det_configyolo = f'{mmdet_root}/configs/yolox/yolox_l_8x8_300e_coco.py'  # noqa: E501
+args.det_configyolo = f'{mmdet_root}/configs/yolox/yolox_l_8xb8-300e_coco.py'  # noqa: E501
 args.det_checkpointyolo = 'https://download.openmmlab.com/mmdetection/v2.0/yolox/yolox_l_8x8_300e_coco/yolox_l_8x8_300e_coco_20211126_140236-d3bd2b23.pth' 
 args.det_config = f'{mmdet_root}/configs/faster_rcnn/faster_rcnn_r50_caffe_fpn_mstrain_1x_coco-person.py'  # noqa: E501
 args.det_checkpoint = 'https://download.openmmlab.com/mmdetection/v2.0/faster_rcnn/faster_rcnn_r50_fpn_1x_coco-person/faster_rcnn_r50_fpn_1x_coco-person_20201216_175929-d022e227.pth'# noqa: E501
 args.det_score_thr = 0.5
-args.pose_config = f'{mmpose_root}/configs/body/2d_kpt_sview_rgb_img/topdown_heatmap/coco/hrnet_w32_coco_256x192.py'  # noqa: E501
-args.pose_checkpoint = 'https://download.openmmlab.com/mmpose/top_down/hrnet/hrnet_w32_coco_256x192-c78dce93_20200708.pth'  # noqa: E501
+args.pose_config = f'{mmpose_root}/configs/body_2d_keypoint/topdown_heatmap/coco/td-hm_hrnet-w32_8xb64-210e_coco-256x192.py'  # noqa: E501
+args.pose_checkpoint = 'https://download.openmmlab.com/mmpose/v1/body_2d_keypoint/topdown_heatmap/coco/td-hm_hrnet-w32_8xb64-210e_coco-256x192-81c58e40_20220909.pth'  # noqa: E501
 args.device = 'cuda:0'
 
 def gen_id(size=8):
