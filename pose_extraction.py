@@ -21,7 +21,7 @@ except (ImportError, ModuleNotFoundError) as e:
                       'required in this script! ')
 
 try:
-    from mmpose.apis import inference_top_down_pose_model, init_pose_model
+    from mmpose.apis import inference_topdown, init_model
 except (ImportError, ModuleNotFoundError) as e:
     print(e)
     raise ImportError('Failed to import `inference_top_down_pose_model` and '
@@ -104,7 +104,7 @@ def detection_inference_yolo(args, frame_paths):
     return results
 
 def pose_inference(args, frame_paths, det_results):
-    model = init_pose_model(args.pose_config, args.pose_checkpoint,
+    model = init_model(args.pose_config, args.pose_checkpoint,
                             args.device)
     print('Performing Human Pose Estimation for each frame')
     prog_bar = mmcv.ProgressBar(len(frame_paths))
@@ -121,7 +121,7 @@ def pose_inference(args, frame_paths, det_results):
 #         d.sort(key=lambda a: a[-1], reverse=True)
 #         d = [dict(bbox=x) for x in d if x[-1] > 0.5][:num_person]
         d = [dict(bbox=x) for x in list(d) if x[-1] > 0.5]
-        pose = inference_top_down_pose_model(model, f, d, format='xyxy')[0]
+        pose = inference_topdown(model, f, d, format='xyxy')[0]
         for j, item in enumerate(pose):
             kp[j, i] = item['keypoints']
         prog_bar.update()
